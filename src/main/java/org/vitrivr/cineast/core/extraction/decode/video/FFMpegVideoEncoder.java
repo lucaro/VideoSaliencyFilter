@@ -35,32 +35,32 @@ public class FFMpegVideoEncoder {
         one.den(1);
     }
 
-    private static  float t, tincr, tincr2;
-    private static AudioFrame generateDummyAudioFrame(int samples){
-        short v;
-
-        int q = 0;
-
-        short[] buffer = new short[samples * 2];
-        for (int j = 0; j < samples; j++) {
-            v = (short)(sin(t) * 10000);
-            for (int i = 0; i < 2; i++){
-                buffer[q++] = v;
-            }
-            t     += tincr;
-            tincr += tincr2;
-        }
-
-        ByteBuffer byteBuf = ByteBuffer.allocate(2*buffer.length);
-        for (int i = 0; i < buffer.length; ++i) {
-            short s = buffer[i];
-            byteBuf.put((byte)((s) & 0xff));
-            byteBuf.put((byte)((s >> 8) & 0xff));
-        }
-
-        return new AudioFrame(0, 0, byteBuf.array(), new AudioDescriptor(44100, 2, samples / 44100));
-
-    }
+//    private static  float t, tincr, tincr2;
+//    private static AudioFrame generateDummyAudioFrame(int samples){
+//        short v;
+//
+//        int q = 0;
+//
+//        short[] buffer = new short[samples * 2];
+//        for (int j = 0; j < samples; j++) {
+//            v = (short)(sin(t) * 10000);
+//            for (int i = 0; i < 2; i++){
+//                buffer[q++] = v;
+//            }
+//            t     += tincr;
+//            tincr += tincr2;
+//        }
+//
+//        ByteBuffer byteBuf = ByteBuffer.allocate(2*buffer.length);
+//        for (int i = 0; i < buffer.length; ++i) {
+//            short s = buffer[i];
+//            byteBuf.put((byte)((s) & 0xff));
+//            byteBuf.put((byte)((s >> 8) & 0xff));
+//        }
+//
+//        return new AudioFrame(0, 0, byteBuf.array(), new AudioDescriptor(44100, 2, samples / 44100));
+//
+//    }
 
     private VideoOutputStreamContainer video_st = null;
     private AudioOutputStreamContainer audio_st = null;

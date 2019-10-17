@@ -7,6 +7,7 @@ import org.tensorflow.Tensor;
 import org.tensorflow.framework.ConfigProto;
 import org.tensorflow.framework.GPUOptions;
 import org.vitrivr.cineast.core.color.ReadableRGBContainer;
+import org.vitrivr.cineast.core.data.raw.images.MultiImage;
 import org.vitrivr.cineast.core.util.LogHelper;
 
 import java.awt.image.BufferedImage;
@@ -19,8 +20,6 @@ import java.util.List;
 
 public class SaliencyMask {
 
-    private final float[][][][][] RNNmask_in = new float[1][28][28][128][8];
-    private final float[][][][][] RNNmask_h = new float[1][28][28][128][8];
     private final Graph graph = new Graph();
     private Session session;
 
@@ -28,7 +27,7 @@ public class SaliencyMask {
     private final Tensor<Float> RNNmask_hTensor;
 
     public SaliencyMask(){
-        graph.importGraphDef(load("graph.pb"));
+        graph.importGraphDef(load());
         ConfigProto config = ConfigProto.newBuilder()
                 .setAllowSoftPlacement(true)
                 .setLogDevicePlacement(true)
@@ -36,6 +35,8 @@ public class SaliencyMask {
                 .build();
         this.session = new Session(graph, config.toByteArray());
 
+        float[][][][][] RNNmask_in = new float[1][28][28][128][8];
+        float[][][][][] RNNmask_h = new float[1][28][28][128][8];
         for (int i = 0; i < RNNmask_h[0].length; ++i){
             for (int j = 0; j < RNNmask_h[0][i].length; ++j){
                 for (int k = 0; k < RNNmask_h[0][i][j].length; ++k){
@@ -53,7 +54,7 @@ public class SaliencyMask {
     }
 
 
-    public float[][][] process(List<BufferedImage> inputImages){
+    public float[][][] process(List<MultiImage> inputImages){
 
         if (inputImages ==  null || inputImages.isEmpty()){
             return null;
@@ -61,9 +62,9 @@ public class SaliencyMask {
 
         ArrayList<BufferedImage> images = new ArrayList<>(21);
 
-        for (BufferedImage img : inputImages){
+        for (MultiImage img : inputImages){
             try {
-                images.add(Thumbnails.of(img).size(448, 448).asBufferedImage());
+                images.add(Thumbnails.of(img.getBufferedImage()).size(448, 448).asBufferedImage());
             } catch (IOException e) {
                 e.printStackTrace(); //TODO
             }
@@ -128,9 +129,9 @@ public class SaliencyMask {
 
 
 
-    protected static byte[] load(String path) {
+    private static byte[] load() {
         try {
-            return Files.readAllBytes((Paths.get(path)));
+            return Files.readAllBytes((Paths.get("omcnn2clstm.pb")));
         } catch (IOException e) {
             throw new RuntimeException(
                     "could not load graph: " + LogHelper.getStackTrace(e));

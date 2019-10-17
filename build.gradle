@@ -32,6 +32,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
 
     compile group: "net.coobird", name: "thumbnailator", version: "0.4.8"
+    compile group: "org.boofcv", name: "boofcv-all", version: "0.34"
 
 
 
