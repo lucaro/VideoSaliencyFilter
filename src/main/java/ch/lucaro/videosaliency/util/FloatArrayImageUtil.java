@@ -76,10 +76,18 @@ public class FloatArrayImageUtil {
 
     }
 
-    public static GrayF32 toImageGray(float[][] fimg){
+    public static GrayF32 toImageGray(float[][] fimg, GrayF32 img){
         final int width = fimg[0].length, height = fimg.length;
 
-        GrayF32 ret = new GrayF32(width, height);
+        GrayF32 ret;
+
+        if (img != null && img.width == width && img.height == height){
+            ret = img;
+        } else {
+            ret = new GrayF32(width, height);
+        }
+
+
 
         for (int x = 0; x < width; ++x){
             for (int y = 0; y < height; ++y){
