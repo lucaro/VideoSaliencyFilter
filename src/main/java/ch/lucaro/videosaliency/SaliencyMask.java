@@ -57,7 +57,7 @@ public class SaliencyMask {
     public float[][][] process(List<MultiImage> inputImages){
 
         if (inputImages ==  null || inputImages.isEmpty()){
-            return null;
+            return new float[0][0][0];
         }
 
         ArrayList<BufferedImage> images = new ArrayList<>(21);
@@ -105,10 +105,12 @@ public class SaliencyMask {
 
         float[] resultArray = buf.array();
 
-        float[][][] resultTensor = new float[16][112][112];
+        int resultImages = Math.min(16, inputImages.size());
+
+        float[][][] resultTensor = new float[resultImages][112][112];
 
         int idx = 0;
-        for (int i = 0; i < 16; ++i){
+        for (int i = 0; i < resultImages; ++i){
             for (int y = 0; y < 112; ++y){
                 for (int x = 0; x < 112; ++x){
                     resultTensor[i][y][x] = resultArray[idx++];
