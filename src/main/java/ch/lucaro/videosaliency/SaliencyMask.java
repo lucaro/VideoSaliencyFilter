@@ -1,6 +1,8 @@
 package ch.lucaro.videosaliency;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.tensorflow.Graph;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;
@@ -25,6 +27,8 @@ public class SaliencyMask {
 
     private final Tensor<Float> RNNmask_inTensor;
     private final Tensor<Float> RNNmask_hTensor;
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public SaliencyMask(){
         graph.importGraphDef(load());
@@ -64,9 +68,9 @@ public class SaliencyMask {
 
         for (MultiImage img : inputImages){
             try {
-                images.add(Thumbnails.of(img.getBufferedImage()).size(448, 448).asBufferedImage());
+                images.add(Thumbnails.of(img.getBufferedImage()).forceSize(448, 448).asBufferedImage());
             } catch (IOException e) {
-                e.printStackTrace(); //TODO
+                LOGGER.error("Could not scale input image: {}", LogHelper.getStackTrace(e));
             }
             if (images.size() >= 21){
                 break;
