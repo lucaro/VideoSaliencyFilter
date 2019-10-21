@@ -14,6 +14,7 @@ import org.vitrivr.cineast.core.data.frames.AudioFrame;
 import org.vitrivr.cineast.core.data.frames.VideoDescriptor;
 import org.vitrivr.cineast.core.data.frames.VideoFrame;
 import org.vitrivr.cineast.core.data.raw.CachedDataFactory;
+import org.vitrivr.cineast.core.data.raw.images.MultiImage;
 import org.vitrivr.cineast.core.extraction.decode.general.Decoder;
 import org.vitrivr.cineast.core.extraction.decode.subtitle.SubTitleDecoder;
 import org.vitrivr.cineast.core.extraction.decode.subtitle.SubtitleDecoderFactory;
