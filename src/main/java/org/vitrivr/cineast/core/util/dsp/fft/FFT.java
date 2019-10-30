@@ -81,6 +81,19 @@ public class FFT {
         this.magnitudeSpectrum = null;
     }
 
+
+    public double[] inverse(){
+        FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+        Complex[] inverse = transformer.transform(this.data, TransformType.INVERSE);
+        double[] ret = new double[inverse.length];
+
+        for (int i = 0; i < ret.length; ++i){
+            ret[i] = inverse[i].getReal();
+        }
+
+        return ret;
+    }
+
     /**
      * Returns the magnitude spectrum of the transformed data. If that spectrum has not been
      * calculated yet it will be upon invocation of the method.
