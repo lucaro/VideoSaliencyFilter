@@ -5,17 +5,17 @@ import java.util.Random;
 public class BrownianNoiseGenerator {
 
     private final Random random;
-    private final short amplitude;
-    private float lastSample = 0;
+    private final double amplitude;
+    private double lastSample = 0;
 
 
-    public BrownianNoiseGenerator(short amplitude) {
+    public BrownianNoiseGenerator(double amplitude) {
         this.amplitude = amplitude;
-        this.random = new Random(amplitude);
+        this.random = new Random(Double.doubleToRawLongBits(amplitude));
     }
 
-    private synchronized float next(){
-        lastSample += (random.nextFloat() * 2f - 1f);
+    private synchronized double next(){
+        lastSample = (lastSample + random.nextDouble() - 0.5f) * 0.99;
         if (lastSample > 1f){
             lastSample = 1f;
         } else if (lastSample < -1f){
@@ -24,21 +24,8 @@ public class BrownianNoiseGenerator {
         return lastSample;
     }
 
-    private short nextSample(){
-        return (short) (this.amplitude * next());
-    }
-
-    public short[] getSamples(int sampleCount){
-        if (sampleCount <= 0){
-            return new short[0];
-        }
-        short[] samples = new short[sampleCount];
-
-        for (int i = 0; i < sampleCount; ++i){
-            samples[i] = nextSample();
-        }
-
-        return samples;
+    public double nextSample(){
+        return (this.amplitude * next());
     }
 
 }

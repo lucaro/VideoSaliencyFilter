@@ -27,12 +27,12 @@ public class BandpassFilter implements  FrequencyDomainFilterInterface {
     public Complex[] filterInPlace(Complex[] fftbins) {
         int startIndex = FFTUtil.binIndex(minFrequency, fftbins.length, sampleRate);
         for (int i = 0; i <= startIndex; ++i){
-            fftbins[i] = Complex.ZERO;
+            fftbins[i] = fftbins[i].multiply(0.05);
         }
 
         int endIndex = FFTUtil.binIndex(maxFrequency, fftbins.length, sampleRate);
         for (int i = endIndex; i < fftbins.length; ++i){
-            fftbins[i] = Complex.ZERO;
+            fftbins[i] = fftbins[i].multiply(0.05);
         }
         return fftbins;
     }

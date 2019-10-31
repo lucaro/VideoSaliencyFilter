@@ -1,5 +1,6 @@
 package ch.lucaro.videosaliency;
 
+import ch.lucaro.videosaliency.util.BrownianNoiseGenerator;
 import org.vitrivr.cineast.core.data.frames.AudioDescriptor;
 import org.vitrivr.cineast.core.data.frames.AudioFrame;
 import org.vitrivr.cineast.core.util.dsp.fft.FFT;
@@ -20,6 +21,7 @@ public class AudioPipeline {
 
     private FFT fft = new FFT();
     private RectangularWindow window = new RectangularWindow();
+    private BrownianNoiseGenerator noise = new BrownianNoiseGenerator(0.005);
 
     public AudioPipeline(){
         this.bufferSize = 1024;
@@ -54,7 +56,14 @@ public class AudioPipeline {
         BandpassFilter filter = new BandpassFilter(minFrequency, maxFrequency, (int) frame.getSamplingrate());
         fft.forward(getMeanSamplesAsDouble(frame), frame.getSamplingrate(), window);
         fft.applyFilter(filter);
-        return fromSamples(fft.inverse(), (int) frame.getSamplingrate());
+
+        double[] samples = fft.inverse();
+
+        for (int i = 0; i < samples.length; ++i){
+            samples[i] = clamp((samples[i] * 1.2 + noise.nextSample()) * 1.2);
+        }
+
+        return fromSamples(samples, (int) frame.getSamplingrate());
 
     }
 
@@ -67,15 +76,25 @@ public class AudioPipeline {
         return samples;
     }
 
-        private static AudioFrame fromSamples(double[] samples, int sampleRate) {
+    private static AudioFrame fromSamples(double[] samples, int sampleRate) {
 
-            ByteBuffer byteBuf = ByteBuffer.allocate(2 * samples.length);
-            for (int i = 0; i < samples.length; ++i) {
-                short s = (short) (samples[i] * Short.MAX_VALUE);
-                byteBuf.put((byte) ((s) & 0xff));
-                byteBuf.put((byte) ((s >> 8) & 0xff));
-            }
-            return new AudioFrame(0, 0, byteBuf.array(), new AudioDescriptor(sampleRate, 1, samples.length / sampleRate));
+        ByteBuffer byteBuf = ByteBuffer.allocate(2 * samples.length);
+        for (int i = 0; i < samples.length; ++i) {
+            short s = (short) (samples[i] * Short.MAX_VALUE);
+            byteBuf.put((byte) ((s) & 0xff));
+            byteBuf.put((byte) ((s >> 8) & 0xff));
         }
+        return new AudioFrame(0, 0, byteBuf.array(), new AudioDescriptor(sampleRate, 1, samples.length / sampleRate));
+    }
+
+    private static double clamp(double d){
+        if (d > 1d){
+            return 1d;
+        }
+        if (d < -1d){
+            return -1d;
+        }
+        return d;
+    }
 
 }
