@@ -1,6 +1,13 @@
 package ch.lucaro.videosaliency;
 
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vitrivr.cineast.core.config.CacheConfig;
 import org.vitrivr.cineast.core.config.DecoderConfig;
 import org.vitrivr.cineast.core.data.frames.AudioFrame;
@@ -10,8 +17,8 @@ import org.vitrivr.cineast.core.extraction.decode.video.FFMpegVideoDecoder;
 import org.vitrivr.cineast.core.extraction.decode.video.FFMpegVideoEncoder;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,13 +33,29 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        System.setProperty("TF_CPP_MIN_LOG_LEVEL", "3");
+        if (args.length < 2){
+            System.out.println("Expected parameters: <input video file>, <output video file>");
+            System.exit(-1);
+        }
+
+        File inputFile = new File(args[0]);
+
+        if (!inputFile.exists() || !inputFile.canRead()){
+            System.out.println("Cannot access specified input file: " + inputFile.getAbsolutePath());
+        }
+
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration config = ctx.getConfiguration();
+        LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+        loggerConfig.setLevel(Level.ERROR);
+        ctx.updateLoggers();
+
 
         saliencyMask = new SaliencyMask();
 
 
         FFMpegVideoDecoder decoder = new FFMpegVideoDecoder();
-        decoder.init(Path.of("query.mp4"), new DecoderConfig(), new CacheConfig());
+        decoder.init(inputFile.toPath(), new DecoderConfig(), new CacheConfig());
 
         LinkedList<VideoFrame> frames = new LinkedList<>();
 
@@ -43,7 +66,7 @@ public class Main {
         }
         frames.add(frame);
 
-        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), (int)frame.getDescriptor().getFps(), 44100, "out.mp4", true);
+        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), (int)frame.getDescriptor().getFps(), 44100, new File(args[1]).getAbsolutePath(), true);
 
         while ((frame = decoder.getNext()) != null){
             frames.add(frame);
