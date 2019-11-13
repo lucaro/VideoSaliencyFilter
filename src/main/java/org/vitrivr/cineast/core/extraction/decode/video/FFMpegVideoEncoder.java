@@ -9,6 +9,7 @@ import org.vitrivr.cineast.core.data.raw.images.MultiImage;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static org.bytedeco.javacpp.avcodec.AV_CODEC_ID_MP3;
 import static org.bytedeco.javacpp.avcodec.AV_CODEC_ID_NONE;
 import static org.bytedeco.javacpp.avformat.*;
 import static org.bytedeco.javacpp.avutil.AVDictionary;
@@ -56,11 +57,13 @@ public class FFMpegVideoEncoder {
         fmt = oc.oformat();
 
         if (fmt.video_codec() != AV_CODEC_ID_NONE) {
-            video_st  = new VideoOutputStreamContainer(width, height, 2_000_000, frameRate, oc, fmt.video_codec(), opt);
+            video_st  = new VideoOutputStreamContainer(width, height, 4_000_000, frameRate, oc, fmt.video_codec(), opt);
         }
 
+        fmt.audio_codec(AV_CODEC_ID_MP3);
+
         if (fmt.audio_codec() != AV_CODEC_ID_NONE && useAudio) {
-            audio_st = new AudioOutputStreamContainer(oc, fmt.audio_codec(), sampleRate, 128_000, opt);
+            audio_st = new AudioOutputStreamContainer(oc, fmt.audio_codec(), sampleRate, 1000, opt);
         }
 
         av_dump_format(oc, 0, filename, 1);
