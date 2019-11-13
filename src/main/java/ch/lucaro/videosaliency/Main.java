@@ -3,10 +3,10 @@ package ch.lucaro.videosaliency;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vitrivr.cineast.core.config.CacheConfig;
 import org.vitrivr.cineast.core.config.DecoderConfig;
@@ -30,6 +30,7 @@ public class Main {
     private static AudioPipeline audioPipeline = new AudioPipeline();
     private static SaliencyMask saliencyMask;
 
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
 
@@ -105,7 +106,7 @@ public class Main {
             }
         }
 
-        System.out.println("---> Processed batch in " + ((System.currentTimeMillis() - startTime) / 1000) + " seconds");
+        LOGGER.info("---> Processed batch in {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     }
 

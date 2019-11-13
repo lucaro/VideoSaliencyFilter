@@ -34,7 +34,6 @@ public class SaliencyMask {
         graph.importGraphDef(load());
         ConfigProto config = ConfigProto.newBuilder()
                 .setAllowSoftPlacement(true)
-                .setLogDevicePlacement(true)
                 .setGpuOptions(GPUOptions.newBuilder().setPerProcessGpuMemoryFraction(0.5))
                 .build();
         this.session = new Session(graph, config.toByteArray());
