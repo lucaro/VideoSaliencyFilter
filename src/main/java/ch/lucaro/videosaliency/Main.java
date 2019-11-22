@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.slf4j.LoggerFactory;
 import org.vitrivr.cineast.core.config.CacheConfig;
 import org.vitrivr.cineast.core.config.DecoderConfig;
 import org.vitrivr.cineast.core.data.frames.AudioFrame;
@@ -67,7 +66,7 @@ public class Main {
         }
         frames.add(frame);
 
-        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), (int)frame.getDescriptor().getFps(), 44100, new File(args[1]).getAbsolutePath(), true);
+        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), frame.getDescriptor().getFps(), 44100, new File(args[1]).getAbsolutePath(), true);
 
         while ((frame = decoder.getNext()) != null){
             frames.add(frame);
@@ -106,7 +105,7 @@ public class Main {
             }
         }
 
-        LOGGER.info("---> Processed batch in {} seconds", (System.currentTimeMillis() - startTime) / 1000);
+        LOGGER.info("Processed batch in {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     }
 

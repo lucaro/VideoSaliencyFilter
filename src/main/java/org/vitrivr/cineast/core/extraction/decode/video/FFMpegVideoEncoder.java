@@ -37,7 +37,7 @@ public class FFMpegVideoEncoder {
 
     private boolean useAudio = false;
 
-    public FFMpegVideoEncoder(int width, int height, int frameRate, int sampleRate, String filename, boolean useAudio){
+    public FFMpegVideoEncoder(int width, int height, float frameRate, int sampleRate, String filename, boolean useAudio){
 
         this.useAudio = useAudio;
 
