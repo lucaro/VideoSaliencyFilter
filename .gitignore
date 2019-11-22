@@ -135,3 +135,4 @@ frames/
 mask/
 tmp/
 build/
+cineast_cache_*
