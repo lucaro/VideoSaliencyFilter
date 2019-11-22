@@ -42,7 +42,11 @@ public class Main {
 
         if (!inputFile.exists() || !inputFile.canRead()){
             System.out.println("Cannot access specified input file: " + inputFile.getAbsolutePath());
+            System.exit(-1);
         }
+
+        File outputFile = new File(args[1]);
+
 
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration config = ctx.getConfiguration();
@@ -66,7 +70,7 @@ public class Main {
         }
         frames.add(frame);
 
-        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), frame.getDescriptor().getFps(), 44100, new File(args[1]).getAbsolutePath(), true);
+        FFMpegVideoEncoder encoder = new FFMpegVideoEncoder(frame.getImage().getWidth(), frame.getImage().getHeight(), frame.getDescriptor().getFps(), 44100, outputFile.getAbsolutePath(), true);
 
         while ((frame = decoder.getNext()) != null){
             frames.add(frame);
