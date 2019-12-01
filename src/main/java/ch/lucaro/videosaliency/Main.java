@@ -17,7 +17,6 @@ import org.vitrivr.cineast.core.extraction.decode.video.FFMpegVideoEncoder;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,13 +24,13 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static ImagePipeline imagePipeline = new ImagePipeline(5, 3f, .1f);
-    private static AudioPipeline audioPipeline = new AudioPipeline();
+    private static ImagePipeline imagePipeline;
+    private static AudioPipeline audioPipeline;
     private static SaliencyMask saliencyMask;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         if (args.length < 2){
             System.out.println("Expected parameters: <input video file>, <output video file>");
@@ -49,12 +48,15 @@ public class Main {
 
 
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
-        LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+        Configuration cfg = ctx.getConfiguration();
+        LoggerConfig loggerConfig = cfg.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
         loggerConfig.setLevel(Level.ERROR);
         ctx.updateLoggers();
 
+        Config config = Config.getConfig();
 
+        imagePipeline = new ImagePipeline(config);
+        audioPipeline = new AudioPipeline(config);
         saliencyMask = new SaliencyMask();
 
 

@@ -23,10 +23,10 @@ public class ImagePipeline {
     private Planar<GrayF32> output = null, salient = null, background = null, blurred = null;
     private GrayF32 smallMask = null, mask = null, invertedMask = null;
 
-    public ImagePipeline(int maskDilateRadius, float backgroundBlurRadiusPercent, float backgroundSaturation){
-        setMaskDilateRadius(maskDilateRadius);
-        setBackgroundBlurRadiusPercent(backgroundBlurRadiusPercent);
-        setBackgroundSaturation(backgroundSaturation);
+    public ImagePipeline(Config config){
+        setMaskDilateRadius(config.getDilateRadius());
+        setBackgroundBlurRadiusPercent(config.getBlurRadius());
+        setBackgroundSaturation(config.getSaturation());
     }
 
     public void setMaskDilateRadius(int maskDilateRadius){

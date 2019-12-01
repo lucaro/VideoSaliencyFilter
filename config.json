@@ -1,0 +1,9 @@
+{
+    "blurRadius" : 3,
+    "dilateRadius" : 4,
+    "saturation" : 0.1,
+    "audioBufferSize" : 1024,
+    "minFrequency" : 100,
+    "maxFrequency" : 2000,
+    "noiseAmplitude" : 0.005
+}

@@ -21,12 +21,13 @@ public class AudioPipeline {
 
     private FFT fft = new FFT();
     private RectangularWindow window = new RectangularWindow();
-    private BrownianNoiseGenerator noise = new BrownianNoiseGenerator(0.005);
+    private BrownianNoiseGenerator noise;
 
-    public AudioPipeline(){
-        this.bufferSize = 1024;
-        this.minFrequency = 100;
-        this.maxFrequency = 2000;
+    public AudioPipeline(Config config){
+        this.bufferSize = config.getAudioBufferSize();
+        this.minFrequency = config.getMinFrequency();
+        this.maxFrequency = config.getMaxFrequency();
+        this.noise = new BrownianNoiseGenerator(config.getNoiseAmplitude());
     }
 
     public List<AudioFrame> process(AudioFrame input){
