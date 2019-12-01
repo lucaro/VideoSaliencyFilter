@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+    id "de.undercouch.download" version "4.0.2"
 }
 
 
@@ -65,4 +66,21 @@ jar {
     }
 
     archiveFileName = 'vsf.jar'
+}
+
+ext.src = [
+        'http://download.lucaro.ch/videoSaliency/example1.mp4',
+        'http://download.lucaro.ch/videoSaliency/example2.mp4',
+        'http://download.lucaro.ch/videoSaliency/omcnn2clstm.pb',
+]
+
+task downloadFiles {
+    doLast {
+        for (s in src) {
+            download {
+                src s
+                dest '.'
+            }
+        }
+    }
 }

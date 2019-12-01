@@ -15,5 +15,6 @@ To build and run the tool, just use the following commands:
 git clone https://github.com/lucaro/VideoSaliencyFilter
 cd VideoSaliencyFilter
 ./gradlew jar
+./gradlew downloadFiles
 java -jar build/libs/vsf.jar <input video> <output video>
 ```

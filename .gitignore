@@ -136,3 +136,6 @@ mask/
 tmp/
 build/
 cineast_cache_*
+
+*.mp4
+*.pb
