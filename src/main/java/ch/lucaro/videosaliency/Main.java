@@ -47,12 +47,6 @@ public class Main {
         File outputFile = new File(args[1]);
 
 
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration cfg = ctx.getConfiguration();
-        LoggerConfig loggerConfig = cfg.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-        loggerConfig.setLevel(Level.ERROR);
-        ctx.updateLoggers();
-
         Config config = Config.getConfig();
 
         imagePipeline = new ImagePipeline(config);
