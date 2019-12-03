@@ -234,7 +234,7 @@ public class FFMpegVideoDecoder implements Decoder<VideoFrame> {
     private void enqueueResampledAudio() {
          /* Convert decoded frame. Break if resampling fails.*/
         if (swresample.swr_convert(this.swr_ctx, null, 0, this.pFrame.data(), this.pFrame.nb_samples()) < 0) {
-            LOGGER.error("Could not convert sample (FFMPEG swr_convert() failed).", this.getClass().getName());
+            LOGGER.error("Could not convert sample (FFMPEG swr_convert() failed).");
             return;
         }
 
@@ -292,7 +292,7 @@ public class FFMpegVideoDecoder implements Decoder<VideoFrame> {
             int g = bytes[pos + 1] & 0xff;
             int b = bytes[pos + 2] & 0xff;
 
-            pixels[i] = ((0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
+            pixels[i] = ((0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF));
         }
 
         /* Prepare frame and associated timestamp and add it to output queue. */

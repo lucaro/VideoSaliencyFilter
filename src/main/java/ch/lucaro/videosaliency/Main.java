@@ -59,6 +59,9 @@ public class Main {
 
         LinkedList<VideoFrame> frames = new LinkedList<>();
 
+        final int totalFrameCount = decoder.count();
+        int currentFrameCount = 0;
+
         VideoFrame frame = decoder.getNext();
 
         if (frame == null){
@@ -70,8 +73,10 @@ public class Main {
 
         while ((frame = decoder.getNext()) != null){
             frames.add(frame);
+            ++currentFrameCount;
             if (frames.size() >= 21){
                 processBatch(frames, encoder);
+                LOGGER.info("Processed {} of {} frames", currentFrameCount, totalFrameCount);
                 while (frames.size() > 5){
                     frames.poll();
                 }
