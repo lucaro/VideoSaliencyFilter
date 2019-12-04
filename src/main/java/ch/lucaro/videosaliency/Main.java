@@ -122,7 +122,7 @@ public class Main {
         float progress = ((float) currentFrame) / totalFrameCount;
         int elapsed = (int) (System.currentTimeMillis() - startMillis) / 1000;
 
-        int remaining = (int) (elapsed / progress);
+        int remaining = (int) (elapsed / progress) - elapsed;
 
         return String.format("Processed " + currentFrame + " of " + totalFrameCount + " frames, (%,.2f%%) remaining time: %02d:%02d:%02d", progress * 100f, remaining / 3600, (remaining % 3600) / 60, remaining % 60);
     }
