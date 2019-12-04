@@ -124,7 +124,7 @@ public class Main {
 
         int remaining = (int) (elapsed / progress);
 
-        return String.format("Processed " + currentFrame + " of " + totalFrameCount + " frames, (%,.2f%%) remaining time: %02d:%02d:%02d", progress, remaining / 3600, (remaining % 3600) / 60, remaining % 60);
+        return String.format("Processed " + currentFrame + " of " + totalFrameCount + " frames, (%,.2f%%) remaining time: %02d:%02d:%02d", progress * 100f, remaining / 3600, (remaining % 3600) / 60, remaining % 60);
     }
 
 }
