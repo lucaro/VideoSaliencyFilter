@@ -19,6 +19,8 @@ public class Config {
     private float minFrequency = 100;
     private float maxFrequency = 2000;
     private float noiseAmplitude = 0.005f;
+    private float gamma = 0.8f;
+    private float cutOffThreshold = 0.5f;
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static Config instance = null;
@@ -107,4 +109,14 @@ public class Config {
     private void setNoiseAmplitude(float noiseAmplitude){
         this.noiseAmplitude = noiseAmplitude;
     }
+
+    @JsonProperty
+    public Float getGamma() { return gamma; }
+
+    private void setGamma(float gamma) { this.gamma = gamma; }
+
+    @JsonProperty
+    public Float getCutOffThreshold() { return cutOffThreshold; }
+
+    public void setCutOffThreshold(float cutOffThreshold) { this.cutOffThreshold = cutOffThreshold; }
 }

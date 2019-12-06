@@ -2,6 +2,8 @@
     "blurRadius" : 3,
     "dilateRadius" : 4,
     "saturation" : 0.1,
+    "gamma" : 0.8,
+    "cutOffThreshold" : 0.5,
     "audioBufferSize" : 1024,
     "minFrequency" : 100,
     "maxFrequency" : 2000,

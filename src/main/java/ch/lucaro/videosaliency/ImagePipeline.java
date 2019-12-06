@@ -19,6 +19,8 @@ public class ImagePipeline {
     private float blurRadius = 3f;
     private int dilateRadius = 4;
     private float saturation = 0.1f;
+    private double gamma = 0.8;
+    private float threshold = 0.5f;
 
     private Planar<GrayF32> output = null, salient = null, background = null, blurred = null;
     private GrayF32 smallMask = null, mask = null, invertedMask = null;
@@ -27,6 +29,8 @@ public class ImagePipeline {
         setMaskDilateRadius(config.getDilateRadius());
         setBackgroundBlurRadiusPercent(config.getBlurRadius());
         setBackgroundSaturation(config.getSaturation());
+        setGamma(config.getGamma());
+        setCutOffThreshold(config.getCutOffThreshold());
     }
 
     public void setMaskDilateRadius(int maskDilateRadius){
@@ -41,14 +45,22 @@ public class ImagePipeline {
         this.saturation = Math.max(0f, Math.min(1f, backgroundSaturation));
     }
 
+    public void setGamma(double gamma){
+        this.gamma = Math.max(0.0001, gamma);
+    }
+
+    public void setCutOffThreshold(float threshold){
+        this.threshold = Math.max(0f, Math.min(1f, threshold));
+    }
+
     public synchronized BufferedImage process(BufferedImage bimg, float[][] fimg){
 
         /* prepare mask */
 
         FloatArrayImageUtil.forEachInplace(fimg, x -> {
-            double d = Math.pow(x, 0.8);
-            if (d < 0.5){
-                return 0;
+            double d = Math.pow(x, gamma);
+            if (d < threshold){
+                return 0d;
             }
             return d;
         });
